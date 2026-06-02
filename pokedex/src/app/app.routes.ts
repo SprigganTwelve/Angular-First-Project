@@ -1,3 +1,12 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+import { PokemonListComponent } from './pages/pokemon-list/pokemon.list';
+import { PokemonDetailComponent } from './pages/pokemon-details/pokemon-details';
+import { FavorisComponent } from './pages/favoris/favoris';
+
+export const routes: Routes = [
+    {path: '', component: PokemonListComponent},
+    { path: "pokemon/:name", component: PokemonDetailComponent },
+    { path: "favoris", component: FavorisComponent },
+    { path: "**", redirectTo: "" }
+];

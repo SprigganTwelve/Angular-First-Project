@@ -1,0 +1,27 @@
+<h1>Pokédex</h1>
+
+<input
+  type="text"
+  class="search"
+  placeholder="Rechercher un Pokémon…"
+  (input)="onSearch($event)"
+/>
+
+@if (pokemons().length === 0) {
+  <p class="info">⏳ Chargement des Pokémon…</p>
+} @else {
+  <div class="grid">
+    @for (p of paginatedPokemons(); track p.id; let idx = $index) {
+      <a class="card" [routerLink]="['/pokemon', p.name]">
+        <img [src]="p.image" [alt]="p.name" loading="lazy" />
+        <span class="num">#{{ p.id }}</span>
+        <span class="name">{{ p.name }}</span>
+      </a>
+      <div (onclick)="updatePaginationIndex(idx)">
+        {{ idx }}      
+      </div>
+    } @empty {
+      <p class="info">Aucun Pokémon ne correspond à « {{ recherche() }} »</p>
+    }
+  </div>
+}

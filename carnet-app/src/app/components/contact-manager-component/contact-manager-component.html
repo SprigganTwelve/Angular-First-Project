@@ -1,0 +1,83 @@
+<div class="manager">
+  <h1>📇 Carnet de contacts</h1>
+
+  <!-- FORMULAIRE (ajout / édition) -->
+  <form #f="ngForm" class="form" (submit)="$event.preventDefault(); enregistrer({
+        nom: nomInput.value, email: emailInput.value, tel: telInput.value });
+        nomInput.value=''; emailInput.value=''; telInput.value=''">
+
+    <h3>{{ enEdition() ? '✏️ Modifier' : '➕ Nouveau contact' }}</h3>
+
+    <input #nomInput   type="text"  placeholder="Nom"    [value]="enEdition()?.nom   ?? ''" required />
+    <input #emailInput type="email" placeholder="Email"  [value]="enEdition()?.email ?? ''" required />
+    <input #telInput   type="tel"   placeholder="Tél"    [value]="enEdition()?.tel   ?? ''" />
+    
+
+    <div class="actions">
+      <button type="submit">{{ enEdition() ? 'Mettre à jour' : 'Ajouter' }}</button>
+      @if (enEdition()) {
+        <button type="button" class="ghost" (click)="annulerEdition()">Annuler</button>
+      }
+    </div>
+  </form>
+  <form action="" class="form"  (submit)="
+        $event.preventDefault();
+        search({
+          tel: searchTelInput.value
+        });
+        searchTelInput.value=''; 
+      "
+  >
+    <h3>Options de recherche</h3>
+    <input #searchTelInput   type="tel"   placeholder="Seacrh using Tel"  />
+    <div class="actions">
+      <button type="submit">Seacrh</button>
+    </div>
+  </form>
+
+  <!-- ÉTATS -->
+  @if (loading()) {
+    <p class="info">⏳ Chargement…</p>
+  } @else if (error()) {
+    <p class="error">❌ {{ error() }} <button (click)="charger()">Réessayer</button></p>
+  } @else {
+    @if (searchedEditions() && searchedEditions()?.length) {
+      <!-- LISTE -->
+      <h3>Editions recherchées</h3>
+      <ul class="liste">
+        @for (c of searchedEditions(); track c.id) {
+          <li>
+            <div class="infos">
+              <strong>{{ c.nom }}</strong>
+              <span>{{ c.email }} · {{ c.tel }}</span>
+            </div>
+            <div class="boutons">
+              <button (click)="editer(c)">✏️</button>
+              <button class="danger" (click)="supprimer(c)">🗑️</button>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+
+    <h3>Toutes les éditions</h3> 
+    <!-- LISTE -->
+    <ul class="liste">
+      @for (c of contacts(); track c.id) {
+        <li>
+          <div class="infos">
+            <strong>{{ c.nom }}</strong>
+            <span>{{ c.email }} · {{ c.tel }}</span>
+          </div>
+          <div class="boutons">
+            <button (click)="editer(c)">✏️</button>
+            <button class="danger" (click)="supprimer(c)">🗑️</button>
+          </div>
+        </li>
+      } @empty {
+        <li class="info">Aucun contact. Ajoute le premier !</li>
+      }
+    </ul>
+  }
+
+</div>
