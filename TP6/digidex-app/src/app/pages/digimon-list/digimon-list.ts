@@ -30,7 +30,7 @@ export class DigimonListComponent implements OnInit {
     this.error.set(null);
     const nom = this.recherche().trim() || undefined;
     this.service.getDigimons(this.pageCourante(), 20, nom).subscribe({
-      next: data => { if(data) this.page.set(data); this.loading.set(false); },
+      next: data => { if(data) this.page.set(data as DigimonPage); this.loading.set(false); },
       error: () => { this.error.set('Le serveur GraphQL (:4000) est-il lancé ?'); this.loading.set(false); },
     });
   }

@@ -38,22 +38,32 @@ export class DigimonGraphqlService {
   private apollo = inject(Apollo);
 
   // Liste paginée + recherche optionnelle
-  getDigimons(page = 0, pageSize = 20, name?: string): Observable<DigimonPage | undefined > {
+  getDigimons(page = 0, pageSize = 20, name?: string){
     return this.apollo
       .watchQuery<{ digimons: DigimonPage }>({
         query: LISTE,
         variables: { page, pageSize, name },
       })
-      .valueChanges.pipe(map(result => result?.data?.digimons));
+      .valueChanges.pipe(map(result => {
+        if(result.data) 
+          return result.data.digimons
+        else
+          return undefined
+      }));
   }
 
   // Détail d'un Digimon
-  getDigimon(id: number): Observable<Digimon> {
+  getDigimon(id: number) {
     return this.apollo
       .watchQuery<{ digimon: Digimon }>({
         query: DETAIL,
         variables: { id },
       })
-      .valueChanges.pipe(map(result => result.data.digimon));
+      .valueChanges.pipe(map(result => {
+        if(result.data)
+          return result.data?.digimon
+        else
+          return undefined
+      }));
   }
 }

@@ -20,7 +20,7 @@ export class DigimonDetailComponent implements OnInit {
 
   ngOnInit() {
     this.service.getDigimon(Number(this.id())).subscribe({
-      next: d => { this.digimon.set(d); this.loading.set(false); },
+      next: d => { if(d) this.digimon.set(d as Digimon); this.loading.set(false); },
       error: () => this.loading.set(false),
     });
   }
